@@ -1,6 +1,7 @@
 const express = require("express");
 var cors = require('cors')
 const mongoose = require("mongoose");
+const dbURI = require("./config/keys").mongoURI;
 const bodyParser = require("body-parser");
 
 const passport = require("passport");
@@ -16,17 +17,39 @@ app.use(
     })
 );
 app.use(bodyParser.json());
+
 // DB Config
-const db = require("./config/keys").mongoURI;
 // Connect to MongoDB
-mongoose
-    .connect(
-        db, {
-            useNewUrlParser: true
-        }
-    )
-    .then(() => console.log("MongoDB successfully connected"))
-    .catch(err => console.log(err));
+    const db = mongoose.connection;
+
+    db.on('connecting', function() {
+        console.log('connecting to MongoDB...');
+      });
+    
+      db.on('error', function(error) {
+        console.error('Error in MongoDb connection: ' + error);
+        mongoose.disconnect();
+      });
+      db.on('connected', function() {
+        console.log('MongoDB connected!');
+      });
+      db.once('open', function() {
+        console.log('MongoDB connection opened!');
+      });
+      db.on('reconnected', function () {
+        console.log('MongoDB reconnected!');
+      });
+      db.on('disconnected', function() {
+        console.log('MongoDB disconnected!');
+        mongoose.connect(dbURI, {server:{auto_reconnect:true}});
+      });
+    
+      mongoose.connect(dbURI, 
+        {
+          useNewUrlParser: true,
+          server: {auto_reconnect:true }
+        });
+
 
 // Passport middleware
 app.use(passport.initialize());
