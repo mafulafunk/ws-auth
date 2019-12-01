@@ -1,4 +1,5 @@
 {
   "JWT_SECRET": "secret",
-  "dbURI": "mongodb://localhost:27017/ws-todos"
+  "dbURI": "mongodb://localhost:27017/ws-todos",
+  "secretOrKey": "secret"
 }
