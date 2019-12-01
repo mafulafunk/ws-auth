@@ -84,17 +84,17 @@ router.post("/login", (req, res) => {
                 const payload = {
                     id: user.id,
                     name: user.name,
-                    myPayload: "dieser Toekn ist nur zum Lesen gültig"
+                    myPayload: "Dieser Token ist nur zum Lesen gültig."
                 };
                 // Sign token
                 jwt.sign(
                     payload,
-                    keys.secretOrKey, {
-                        expiresIn: 31556926 // 1 year in seconds
+                    keys.secretOrKey,
+                    {
+                        expiresIn: 180 // seconds
                     },
                     (err, token) => {
                         res.json({
-                            myPayload: "hier kommt noch was hin",
                             success: true,
                             token: "Bearer " + token
                         });
