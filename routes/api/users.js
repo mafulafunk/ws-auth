@@ -76,7 +76,7 @@ router.post('/login', async (req, res) => {
         payload,
         config.get('secretOrKey'),
         {
-          expiresIn: 180 // seconds
+          expiresIn: 1800 // seconds
         },
         (err, token) => {
           return res.json({
